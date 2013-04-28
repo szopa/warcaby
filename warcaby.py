@@ -14,32 +14,27 @@
 
 import pygame
 class pionek(object):
-    def __init__(self, color, col, row ):
-        
-        self.color = kolor
-        self.row = row
-        self.col = col
+    def __init__(self,img, pos):
+        #pos to (row, col)
+        self.img=img
+        self.pos = pos
 
 
     def ruch(self, kierunek):
+        pos=self.pos
         if kierunek:
-            self.col += 1
+            col = pos[0]+1 
         else:
-            self.col -= 1
-        self.row+=1
-        (x, y) = self.posn
-        new_y_pos = y + self.y_velocity
-        (target_x, target_y) = self.target_posn   # Unpack the position
-        dist_to_go = target_y - new_y_pos         # How far to our floor?
-
-        if dist_to_go < 0:                        # Are we under floor?
-            self.y_velocity = -0.65 * self.y_velocity     # Bounce
-            new_y_pos = target_y + dist_to_go     # Move back above floor
-
-        self.posn = (x, new_y_pos)   
+            col = pos[0]-1
+        row=pos[1]+1
+        self.posn=(row,col)
+        
+    
+    def draw(self, surface):
+        surface.blit(self.image, self.posn)
     
 
-def draw_board(the_board):
+def main()):
     """ Draw a chess board with queens, as determined by the the_board. """
 
     pygame.init()
@@ -50,15 +45,35 @@ def draw_board(the_board):
     sq_sz = surface_sz // n    # sq_sz is length of a square.
     surface_sz = n * sq_sz     # Adjust to exactly fit n squares.
 
+    
+    player1=[]
+    player2=[]
     # Create the surface of (width, height), and its window.
     surface = pygame.display.set_mode((surface_sz, surface_sz))
-
-    ball = pygame.image.load("ball.jpg")
+    ball = pygame.image.load("ball.jpg")    
 
     # Use an extra offset to centre the ball in its square.
     # If the square is too small, offset becomes negative,
     #   but it will still be centered :-)
     ball_offset = (sq_sz-ball.get_width()) // 2
+    for row in range(n):           # Draw each row of the board.
+        c_indx = row % 2           # Alternate starting color
+        for col in range(n):       # Run through cols drawing squares
+            the_square = (col*sq_sz, row*sq_sz, sq_sz, sq_sz)
+            surface.fill(colors[c_indx], the_square)
+            # Now flip the color index for the next square
+            c_indx = (c_indx + 1) % 2
+    for row in range(3):
+        for col in range(4):
+            pion=pionek(ball, (row,col))
+            player1.append(pion)
+            #((2*col+row%2)*sq_sz+ball_offset,row*sq_sz+ball_offset))
+
+    for row in range(5,9):
+        for col in range(4):
+            pion=pionek(ball, (row,col))
+            player2.append(pion)
+            #surface.blit(ball, ((2*col+row%2)*sq_sz+ball_offset,row*sq_sz+ball_offset))
 
     while True:
 
@@ -68,22 +83,10 @@ def draw_board(the_board):
             break;
 
         # Draw a fresh background (a blank chess board)
-        for row in range(n):           # Draw each row of the board.
-            c_indx = row % 2           # Alternate starting color
-            for col in range(n):       # Run through cols drawing squares
-                the_square = (col*sq_sz, row*sq_sz, sq_sz, sq_sz)
-                surface.fill(colors[c_indx], the_square)
-                # Now flip the color index for the next square
-                c_indx = (c_indx + 1) % 2
-
+       
         # Now that squares are drawn, draw the queens.
-        for row in range(3):
-            for col in range(4):
-                surface.blit(ball, ((2*col+row%2)*sq_sz+ball_offset,row*sq_sz+ball_offset))
-
-        for row in range(5,9):
-            for col in range(4):
-                surface.blit(ball, ((2*col+row%2)*sq_sz+ball_offset,row*sq_sz+ball_offset))
+        for pion in player1+player2:
+            pion.drow(surface)
         pygame.display.flip()
 
 
