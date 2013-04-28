@@ -14,18 +14,19 @@
 
 import pygame
 class pionek(object):
-    def __init__(self,img, pos):
+    def __init__(self,img, posn,img2):
         #pos to (row, col)
-        self.img=img
-        self.pos = pos
+        self.image=img
+        self.posn = posn
+        self.img2=img2
 
 
     def ruch(self, kierunek):
-        pos=self.pos
+        posn=self.posn
         if kierunek:
-            col = pos[0]+1 
+            col = posn[0]+1 
         else:
-            col = pos[0]-1
+            col = posn[0]-1
         row=pos[1]+1
         self.posn=(row,col)
         
@@ -33,7 +34,21 @@ class pionek(object):
     def draw(self, surface):
         surface.blit(self.image, self.posn)
     
-
+    def contains_point(self, pt):
+      """ Return True if my sprite rectangle contains point pt """
+      (my_x, my_y) = self.posn
+      my_width = self.image.get_width()
+      my_height = self.image.get_height()
+      (x, y) = pt
+      return ( x >= my_x and x < my_x + my_width and
+               y >= my_y and y < my_y + my_height)
+    
+    def handle_click(self):
+        self.img=self.image
+        self.image = self.img2
+    def handle_unclick(self):
+        self.img2 = self.image
+        self.image=self.img
 def main()):
     """ Draw a chess board with queens, as determined by the the_board. """
 
@@ -50,8 +65,9 @@ def main()):
     player2=[]
     # Create the surface of (width, height), and its window.
     surface = pygame.display.set_mode((surface_sz, surface_sz))
-    ball = pygame.image.load("ball.jpg")    
-
+    ball = pygame.image.load("ball.jpg")
+    ball1 = pygame.image.load("ball1.jpg")
+    ball2 = pygame.image.load("ball2.jpg")
     # Use an extra offset to centre the ball in its square.
     # If the square is too small, offset becomes negative,
     #   but it will still be centered :-)
@@ -65,13 +81,13 @@ def main()):
             c_indx = (c_indx + 1) % 2
     for row in range(3):
         for col in range(4):
-            pion=pionek(ball, (row,col))
+            pion=pionek(ball, (row,col),ball2)
             player1.append(pion)
             #((2*col+row%2)*sq_sz+ball_offset,row*sq_sz+ball_offset))
 
     for row in range(5,9):
         for col in range(4):
-            pion=pionek(ball, (row,col))
+            pion=pionek(ball1, (row,col),ball2)
             player2.append(pion)
             #surface.blit(ball, ((2*col+row%2)*sq_sz+ball_offset,row*sq_sz+ball_offset))
 
@@ -81,6 +97,14 @@ def main()):
         ev = pygame.event.poll()
         if ev.type == pygame.QUIT:
             break;
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+            posn_of_click = ev.dict["pos"]
+            for pion in player1:
+                if pion.contains_point(posn_of_click):
+                    pion.handle_click()
+                    pion1.handl_unclick()
+                    pion1=pion
+                break
 
         # Draw a fresh background (a blank chess board)
        
