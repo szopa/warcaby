@@ -1,24 +1,11 @@
-#class GameBoard(object):
-
-
-
-#     plansza = [1, 2, 1, 2, 1, 2, 1, 2],
-# [2, 1, 2, 1, 2, 1, 2, 1],
-# [1, 2, 1, 2, 1, 2, 1, 2],
-# [2, 1, 2, 1, 2, 1, 2, 1],
-# [1, 2, 1, 2, 1, 2, 1, 2],
-# [2, 1, 2, 1, 2, 1, 2, 1],
-# [1, 2, 1, 2, 1, 2, 1, 2],
-# [2, 1, 2, 1, 2, 1, 2, 1]
-
-
+#!/usr/bin/python
 import pygame
 
 n = 8         # This is an NxN chess board.
 surface_sz = 480           # Proposed physical surface size.
 sq_sz = surface_sz // n    # sq_sz is length of a square.
 surface_sz = n * sq_sz
-ball = pygame.image.load("ball.jpg")
+ball = pygame.image.load("pion.png")
 ball_offset = (sq_sz-ball.get_width()) // 2
 tablica =  [[0, 0, 0, 0, 0, 0, 0, 0], 
             [0, 0, 0, 0, 0, 0, 0, 0], 
