@@ -28,6 +28,7 @@ tablica =  [[0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0], 
             [0, 0, 0, 0, 0, 0, 0, 0], 
             [0, 0, 0, 0, 0, 0, 0, 0]]
+surface = pygame.display.set_mode((surface_sz, surface_sz))
 
 class pionek(object):
     def __init__(self,img, posn,img2):
@@ -36,6 +37,7 @@ class pionek(object):
         self.posn = posn
         self.img2=img2
         self.img = img
+        self.moves=[]
 
 
     def ruch(self, kierunek):
@@ -67,9 +69,27 @@ class pionek(object):
     def handle_click(self):
         self.img=self.image
         self.image = self.img2
+        if tablica[self.posn[1]+1][self.posn[0]+1]==0:
+            self.moves.append(((self.posn[0]+1)*sq_sz, (self.posn[1]+1)*sq_sz, sq_sz, sq_sz))
+            surface.fill((200,200,200), self.moves[-1])
+        elif tablica[self.posn[1]+1][self.posn[0]+1]==2 and tablica[self.posn[1]+2][self.posn[0]+2]==0: 
+            self.moves.append(((self.posn[0]+2)*sq_sz, (self.posn[1]+2)*sq_sz, sq_sz, sq_sz))
+            surface.fill((200,200,200), self.moves[-1])
+        if tablica[self.posn[1]+1][self.posn[0]-1]==0:
+            self.moves.append(((self.posn[0]-1)*sq_sz, (self.posn[1]+1)*sq_sz, sq_sz, sq_sz))
+            surface.fill((200,200,200), self.moves[-1])
+        elif tablica[self.posn[1]+1][self.posn[0]-1]==2 and tablica[self.posn[1]+2][self.posn[0]-2]==0: 
+            self.moves.append(((self.posn[0]-2)*sq_sz, (self.posn[1]+2)*sq_sz, sq_sz, sq_sz))
+            surface.fill((200,200,200), self.moves[-1])
+
+
+
     def handle_unclick(self):
         self.img2 = self.image
         self.image=self.img
+        for i in self.moves:
+            surface.fill((255,255,255), i)
+        self.moves=[]
 def main():
     """ Draw a chess board with queens, as determined by the the_board. """
 
@@ -85,7 +105,7 @@ def main():
     player1=[]
     player2=[]
     # Create the surface of (width, height), and its window.
-    surface = pygame.display.set_mode((surface_sz, surface_sz))
+    
     ball = pygame.image.load("pion.png")
     ball1 = pygame.image.load("pion1.png")
     ball2 = pygame.image.load("pion2.png")
@@ -100,7 +120,6 @@ def main():
             surface.fill(colors[c_indx], the_square)
             # Now flip the color index for the next square
             c_indx = (c_indx + 1) % 2
-
 
     for row in range(3):
         for col in range(4):
@@ -134,6 +153,7 @@ def main():
                     pion1.handle_unclick()
                     pion.handle_click()
                     pion1=pion
+                    pygame.display.flip()
                     break
 
         # Draw a fresh background (a blank chess board)
