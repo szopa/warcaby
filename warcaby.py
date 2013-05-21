@@ -34,7 +34,9 @@ class pionek(object):
         else:
             col = posn[1]-1
         row=posn[2]+1
+        tablica[posn[1]][posn[0]]=0
         self.posn=(col,row)
+        tablica[row][col]=1
         
     
     def draw(self, surface):
@@ -125,6 +127,7 @@ def main():
             #surface.blit(ball, ((2*col+row%2)*sq_sz+ball_offset,row*sq_sz+ball_offset))
     pion1=pionek(ball, (0,0),ball2)
     print tablica
+    click=0
 
     while True:
 
@@ -141,7 +144,14 @@ def main():
                     pion.handle_click()
                     pion1=pion
                     pygame.display.flip()
+                    click=1
                     break
+        if ev.type == pygame.MOUSEBUTTONDOWN and click==1: 
+            posn_of_click = ev.dict["pos"]
+            if posn_of_click[0]/sq_sz== pion1.posn[0]+1:
+                pion1.ruch(1)
+            elif posn_of_click[0]/sq_sz== pion1.posn[0]-1:
+                pion1.ruch(0)
 
         # Draw a fresh background (a blank chess board)
        
