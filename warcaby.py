@@ -36,11 +36,11 @@ class pionek(object):
         posn=self.posn
         if kierunek==0:
             col = posn[0]-2
-            row = posn[1]-2
+            row = posn[1]+2
             bij(0)
         elif kierunek == 1:
             col = posn[0]-1
-            row = posn[1]-1
+            row = posn[1]+1
         elif kierunek == 2:
             col = posn[0]+1
             row = posn[1]+1
