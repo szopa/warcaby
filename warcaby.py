@@ -30,10 +30,10 @@ class pionek(object):
     def ruch(self, kierunek):
         posn=self.posn
         if kierunek:
-            col = posn[1]+1 
+            col = posn[0]+1 
         else:
-            col = posn[1]-1
-        row=posn[2]+1
+            col = posn[0]-1
+        row=posn[1]+1
         tablica[posn[1]][posn[0]]=0
         self.posn=(col,row)
         tablica[row][col]=1
@@ -148,10 +148,15 @@ def main():
                     break
         if ev.type == pygame.MOUSEBUTTONDOWN and click==1: 
             posn_of_click = ev.dict["pos"]
-            if posn_of_click[1]/sq_sz== pion1.posn[1]+1:
+            if posn_of_click[0]/sq_sz== pion1.posn[0]+1 and posn_of_click[1]/sq_sz== pion1.posn[1]+1 :
+                pion1.ruch(3)
+            elif posn_of_click[0]/sq_sz== pion1.posn[0]+2 and posn_of_click[1]/sq_sz== pion1.posn[1]+2 :
+                pion1.ruch(2)
+            elif posn_of_click[0]/sq_sz== pion1.posn[0]-1 and posn_of_click[1]/sq_sz== pion1.posn[1]+1 :
                 pion1.ruch(1)
-            elif posn_of_click[1]/sq_sz== pion1.posn[1]-1:
+            elif posn_of_click[0]/sq_sz== pion1.posn[0]-2 and posn_of_click[1]/sq_sz== pion1.posn[1]+2 :
                 pion1.ruch(0)
+
 
         # Draw a fresh background (a blank chess board)
        
