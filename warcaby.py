@@ -25,15 +25,29 @@ class pionek(object):
         self.img2=img2
         self.img = img
         self.moves=[]
-
-
+    def bij(self, kierunek):
+        posn=self.posn
+        if kierunek==0:
+            tablica[posn[1]-1][posn[0]-1]=0
+        else:
+            tablica[posn[1]+1][posn[0]+1]=0
+#####usuwanie z tablicy pionków###########
     def ruch(self, kierunek):
         posn=self.posn
-        if kierunek:
-            col = posn[0]+1 
-        else:
+        if kierunek==0:
+            col = posn[0]-2
+            row = posn[1]-2
+            bij(0)
+        elif kierunek == 1:
             col = posn[0]-1
-        row=posn[1]+1
+            row = posn[1]-1
+        elif kierunek == 2:
+            col = posn[0]+1
+            row = posn[1]+1
+        elif kierunek == 3:
+            col = posn[0]+2
+            row = posn[1]+2
+            bij(1)
         tablica[posn[1]][posn[0]]=0
         self.posn=(col,row)
         tablica[row][col]=1
