@@ -25,19 +25,22 @@ class pionek(object):
         self.img2=img2
         self.img = img
         self.moves=[]
+    
     def bij(self, kierunek):
         posn=self.posn
         if kierunek==0:
             tablica[posn[1]-1][posn[0]-1]=0
         else:
             tablica[posn[1]+1][posn[0]+1]=0
-#####usuwanie z tablicy pionków###########
+#####usuwanie z tablicy pionkpw###########
     def ruch(self, kierunek):
         posn=self.posn
+        self.handle_unclick()
+        surface.fill((255,255,255),(posn[0]*sq_sz, posn[1]*sq_sz, sq_sz, sq_sz))
         if kierunek==0:
             col = posn[0]-2
             row = posn[1]+2
-            bij(0)
+            self.bij(0)
         elif kierunek == 1:
             col = posn[0]-1
             row = posn[1]+1
@@ -47,10 +50,12 @@ class pionek(object):
         elif kierunek == 3:
             col = posn[0]+2
             row = posn[1]+2
-            bij(1)
+            self.bij(1)
         tablica[posn[1]][posn[0]]=0
+        
         self.posn=(col,row)
         tablica[row][col]=1
+
         
     
     def draw(self, surface):
@@ -72,16 +77,16 @@ class pionek(object):
     def handle_click(self):
         self.img=self.image
         self.image = self.img2
-        if tablica[self.posn[1]+1][self.posn[0]+1]==0:
+        if self.posn[0]<n-1 and tablica[self.posn[1]+1][self.posn[0]+1]==0:
             self.moves.append(((self.posn[0]+1)*sq_sz, (self.posn[1]+1)*sq_sz, sq_sz, sq_sz))
             surface.fill((200,200,200), self.moves[-1])
-        elif tablica[self.posn[1]+1][self.posn[0]+1]==2 and tablica[self.posn[1]+2][self.posn[0]+2]==0: 
+        elif self.posn[0]<n-2 and tablica[self.posn[1]+1][self.posn[0]+1]==2 and tablica[self.posn[1]+2][self.posn[0]+2]==0: 
             self.moves.append(((self.posn[0]+2)*sq_sz, (self.posn[1]+2)*sq_sz, sq_sz, sq_sz))
             surface.fill((200,200,200), self.moves[-1])
-        if tablica[self.posn[1]+1][self.posn[0]-1]==0:
+        if self.posn[0]>0 and tablica[self.posn[1]+1][self.posn[0]-1]==0:
             self.moves.append(((self.posn[0]-1)*sq_sz, (self.posn[1]+1)*sq_sz, sq_sz, sq_sz))
             surface.fill((200,200,200), self.moves[-1])
-        elif tablica[self.posn[1]+1][self.posn[0]-1]==2 and tablica[self.posn[1]+2][self.posn[0]-2]==0: 
+        elif self.posn[0]>1 and tablica[self.posn[1]+1][self.posn[0]-1]==2 and tablica[self.posn[1]+2][self.posn[0]-2]==0: 
             self.moves.append(((self.posn[0]-2)*sq_sz, (self.posn[1]+2)*sq_sz, sq_sz, sq_sz))
             surface.fill((200,200,200), self.moves[-1])
 
@@ -162,14 +167,19 @@ def main():
                     break
         if ev.type == pygame.MOUSEBUTTONDOWN and click==1: 
             posn_of_click = ev.dict["pos"]
-            if posn_of_click[0]/sq_sz== pion1.posn[0]+1 and posn_of_click[1]/sq_sz== pion1.posn[1]+1 :
-                pion1.ruch(3)
-            elif posn_of_click[0]/sq_sz== pion1.posn[0]+2 and posn_of_click[1]/sq_sz== pion1.posn[1]+2 :
+            if pion1.posn[0]<n-1 and posn_of_click[0]/sq_sz== pion1.posn[0]+1 and posn_of_click[1]/sq_sz== pion1.posn[1]+1 :
                 pion1.ruch(2)
+                click = 0
+            elif pion1.posn[0]<n-2 and tablica[pion1.posn[1]+1][pion1.posn[0]+1]==2 and posn_of_click[0]/sq_sz== pion1.posn[0]+2 and posn_of_click[1]/sq_sz== pion1.posn[1]+2 :
+                pion1.ruch(3)
             elif posn_of_click[0]/sq_sz== pion1.posn[0]-1 and posn_of_click[1]/sq_sz== pion1.posn[1]+1 :
                 pion1.ruch(1)
-            elif posn_of_click[0]/sq_sz== pion1.posn[0]-2 and posn_of_click[1]/sq_sz== pion1.posn[1]+2 :
+                click = 0
+            elif tablica[pion1.posn[1]-1][pion1.posn[0]-1]==2 and posn_of_click[0]/sq_sz== pion1.posn[0]-2 and posn_of_click[1]/sq_sz== pion1.posn[1]+2 :
                 pion1.ruch(0)
+                click= 0
+            #click = 0
+
 
 
         # Draw a fresh background (a blank chess board)
