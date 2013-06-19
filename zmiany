@@ -1,0 +1,23 @@
+dodatki:
+
+na początku zmiana ( linia 21)
+surface = pygame.display.set_mode((surface_sz, surface_sz)) na 
+surface = pygame.display.set_mode((surface_sz, surface_sz+100))
+
+linia 182
+
+def text(t, font):
+  label = font.render(t, 1, (255,255,0))
+  screen.blit(label, (500, 100))
+  
+  
+  
+w main():
+myfont = pygame.font.SysFont("monospace", 15)
+
+
+po if listen==1:
+    text("cierpliwie czekaj na ruch przeciwnika. może pakiet dotrze :)",myfont)
+    
+przed pygame.display.flip() (ok. 330 linii)    
+      text("twoja kolej",myfont)
